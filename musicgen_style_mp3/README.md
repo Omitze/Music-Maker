@@ -1,51 +1,51 @@
-# MusicGen-Style MP3 风格生成器操作手册
+# MusicGen-Style MP3 Style Generator Manual
 
-本目录是项目的可运行源码目录，包含 CLI、Web UI、音频处理、生成流程和历史量化实验工具。
+This directory contains the runnable source code for the project, including the CLI, Web UI, audio processing utilities, generation workflow, and historical quantization experiment tools.
 
-## 1. 功能
+## 1. Features
 
-- 输入 MP3 作为风格参考音频。
-- 输入可选英文 prompt。
-- 输出新的 MP3 音乐。
-- 从参考音频中提取短 style window。
-- 支持 Gradio 网页界面。
-- 支持命令行生成。
-- 支持串行分段生成和 crossfade 拼接。
-- 默认使用官方原始 MusicGen-Style 模型。
+- Use an input MP3 as the style reference audio.
+- Enter an optional English prompt.
+- Generate a new MP3 music file.
+- Extract short style windows from the reference audio.
+- Support a Gradio Web UI.
+- Support command-line generation.
+- Support serial segmented generation and crossfade stitching.
+- Use the official original MusicGen-Style model by default.
 
-## 2. 模型与许可证
+## 2. Model and License
 
-默认模型为官方原始 MusicGen-Style 1.5B：
+The default model is the official original MusicGen-Style 1.5B model:
 
 ```text
 https://huggingface.co/facebook/musicgen-style
 ```
 
-运行默认使用 Hugging Face repo id：
+By default, the runtime uses the following Hugging Face repo id:
 
 ```text
 facebook/musicgen-style
 ```
 
-模型权重许可证为 `CC-BY-NC 4.0`，仅适合研究和非商业用途。
+The model weights are licensed under `CC-BY-NC 4.0` and are suitable only for research and non-commercial use.
 
-## 3. 安装环境
+## 3. Environment Setup
 
-推荐使用 conda 环境文件：
+Using the conda environment file is recommended:
 
 ```bash
 conda env create -f environment.yml
 conda activate lhy_music
 ```
 
-如果环境已经存在，直接激活：
+If the environment already exists, activate it directly:
 
 ```bash
 source /home/luoyingfeng/anaconda3/etc/profile.d/conda.sh
 conda activate lhy_music
 ```
 
-手动安装方式：
+Manual installation:
 
 ```bash
 conda create -n lhy_music python=3.10 -y
@@ -55,7 +55,7 @@ pip install torch==2.1.0 torchaudio==2.1.0 torchvision==0.16.0 --index-url https
 pip install -r requirements.txt
 ```
 
-当前已验证环境包括：
+The currently verified environment includes:
 
 ```text
 Python 3.10
@@ -68,18 +68,18 @@ PyAV 11.0.0
 Gradio 6.14.0
 ```
 
-## 4. 模型下载与缓存
+## 4. Model Download and Cache
 
-未指定 `--model` 时，项目默认使用官方 Hugging Face 原始模型：
+When `--model` is not specified, the project uses the official original Hugging Face model by default:
 
 ```text
 facebook/musicgen-style
 https://huggingface.co/facebook/musicgen-style
 ```
 
-首次运行时，AudioCraft 会从 Hugging Face 下载模型权重。
+On the first run, AudioCraft downloads the model weights from Hugging Face.
 
-如果你已经手动下载模型，或希望使用指定模型目录，可以通过 `--model` 指向本地模型目录：
+If you have manually downloaded the model, or if you want to use a specific model directory, point `--model` to the local model directory:
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
@@ -88,7 +88,7 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
   --model /path/to/local/musicgen-style
 ```
 
-Web UI 也支持同样的模型指定方式：
+The Web UI supports the same model selection method:
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/web_app.py \
@@ -97,11 +97,11 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/web_app.py \
   --model /path/to/local/musicgen-style
 ```
 
-不建议默认使用本项目的 INT8 量化模型，因为实际生成效果不如官方原始模型。
+Using this project's INT8 quantized model as the default is not recommended, because its actual generation quality is worse than the official original model.
 
-## 5. 启动网页
+## 5. Start the Web UI
 
-启动网页：
+Start the Web UI:
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/web_app.py \
@@ -109,39 +109,39 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/web_app.py \
   --port 7860
 ```
 
-浏览器打开：
+Open in the browser:
 
 ```text
 http://127.0.0.1:7860
 ```
 
-网页支持：
+The Web UI supports:
 
-- 上传输入 MP3。
-- 输入英文 prompt。
-- 设置生成总时长。
-- 设置单段时长。
-- 设置 crossfade。
-- 设置 style window。
-- 设置 CFG、temperature、top-k、seed 和 MP3 码率。
-- 生成后在线播放和下载 MP3。
+- Uploading an input MP3.
+- Entering an English prompt.
+- Setting the total generation duration.
+- Setting the segment duration.
+- Setting crossfade.
+- Setting the style window.
+- Setting CFG, temperature, top-k, seed, and MP3 bitrate.
+- Previewing and downloading the generated MP3 after generation.
 
-网页未指定 `--model` 时默认使用官方原始模型：
+When `--model` is not specified, the Web UI uses the official original model by default:
 
 ```text
 facebook/musicgen-style
 https://huggingface.co/facebook/musicgen-style
 ```
 
-如果启动时传入 `--model /path/to/local/musicgen-style`，网页会使用该本地模型目录。
+If `--model /path/to/local/musicgen-style` is passed when starting the Web UI, the Web UI uses that local model directory.
 
-网页输出默认保存到：
+Web UI outputs are saved by default to:
 
 ```text
 /mnt/luoyingfeng/lhy/music_maker/outputs/web
 ```
 
-## 6. CLI 环境检查
+## 6. CLI Environment Check
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
@@ -150,13 +150,13 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
   --doctor
 ```
 
-成功时会看到：
+On success, you will see:
 
 ```text
-doctor 完成: CUDA、ffmpeg、模型加载和 API 检查通过。
+doctor completed: CUDA, ffmpeg, model loading, and API checks passed.
 ```
 
-## 7. CLI 最小生成测试
+## 7. Minimal CLI Generation Test
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
@@ -171,7 +171,7 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
   --prompt "atmospheric electronic music with soft pulses and echoing textures"
 ```
 
-## 8. CLI 正式生成
+## 8. Full CLI Generation
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
@@ -185,50 +185,50 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
   --prompt "atmospheric electronic music with soft pulses and echoing textures"
 ```
 
-## 9. 关键参数
+## 9. Key Parameters
 
-- `-i, --input`：输入 MP3。
-- `-o, --output`：输出 MP3。
-- `--model`：模型名或本地模型目录；未指定时默认 `facebook/musicgen-style`，指定时使用传入的本地目录或模型名。
-- `--prompt`：英文文本描述，可为空。
-- `--duration`：输出总时长，默认 `90` 秒。
-- `--segment-duration`：单段净贡献时长，越小越省显存。
-- `--overlap`：段间交叉淡化秒数。
-- `--style-window`：推荐使用 `auto`。
-- `--style-hop`：风格窗口滑动步长。
-- `--max-style-windows`：最多提取风格窗口数量。
-- `--style-start`：固定风格窗口起点，可选。
-- `--cfg-coef`：style conditioning guidance。
-- `--cfg-coef-2`：text conditioning guidance。
-- `--temperature`：采样温度。
-- `--top-k`：top-k 采样。
-- `--seed`：随机种子。
-- `--bitrate`：MP3 输出码率。
-- `--keep-wav`：保留中间 WAV。
-- `--doctor`：只检查环境和模型 API。
-- `--dry-run`：只生成短片段测试。
+- `-i, --input`: Input MP3.
+- `-o, --output`: Output MP3.
+- `--model`: Model name or local model directory. If not specified, defaults to `facebook/musicgen-style`; if specified, the provided local directory or model name is used.
+- `--prompt`: English text description. Can be empty.
+- `--duration`: Total output duration. Default: `90` seconds.
+- `--segment-duration`: Net contribution duration of each segment. Smaller values use less VRAM.
+- `--overlap`: Crossfade duration between segments.
+- `--style-window`: `auto` is recommended.
+- `--style-hop`: Sliding hop duration for style windows.
+- `--max-style-windows`: Maximum number of style windows to extract.
+- `--style-start`: Optional fixed start time for the style window.
+- `--cfg-coef`: Style conditioning guidance.
+- `--cfg-coef-2`: Text conditioning guidance.
+- `--temperature`: Sampling temperature.
+- `--top-k`: Top-k sampling.
+- `--seed`: Random seed.
+- `--bitrate`: MP3 output bitrate.
+- `--keep-wav`: Keep the intermediate WAV file.
+- `--doctor`: Only check the environment and model API.
+- `--dry-run`: Generate only a short segment for testing.
 
-## 10. 输入 MP3 长度与 style window
+## 10. Input MP3 Length and Style Window
 
-输入 MP3 可以是一两分钟甚至更长。项目不会把完整 MP3 直接送入 style conditioner，而是从参考音频中提取短 style window。
+The input MP3 can be one or two minutes long, or even longer. The project does not feed the full MP3 directly into the style conditioner. Instead, it extracts short style windows from the reference audio.
 
-当前模型真实最短 style window 是 `3.00` 秒，所以推荐使用：
+The actual minimum style window for the current model is `3.00` seconds, so the recommended setting is:
 
 ```bash
 --style-window auto
 ```
 
-## 11. 关于量化模型
+## 11. About Quantized Models
 
-本项目曾生成并验证 INT8 磁盘量化模型，但实际生成效果不如官方原始模型，因此不再作为默认推荐。
+This project previously generated and verified an INT8 disk-quantized model, but its actual generation quality is worse than the official original model, so it is no longer recommended as the default.
 
-如果显存不足，可以尝试使用项目提供的量化相关脚本：
+If you run out of VRAM, you can try the quantization-related script provided by this project:
 
 ```text
 musicgen_style_mp3/quantization.py
 ```
 
-已有量化模型目录可通过 CLI 的 `--quantized-model-dir` 指定：
+An existing quantized model directory can be specified through the CLI with `--quantized-model-dir`:
 
 ```bash
 python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
@@ -243,17 +243,17 @@ python /mnt/luoyingfeng/lhy/music_maker/musicgen_style_mp3/main.py \
   --prompt "atmospheric electronic music with soft pulses and echoing textures"
 ```
 
-量化模型只适合作为历史实验或磁盘占用对比参考：
+The quantized model is only suitable as a historical experiment or as a disk-usage comparison reference:
 
 ```text
 quant_models/musicgen-style-int8/
 ```
 
-该量化方案主要减少硬盘占用，不能降低推理显存，因为当前 AudioCraft 加载接口仍需要标准权重结构，运行时会先把 INT8 packed 权重反量化到临时目录再加载。
+This quantization approach mainly reduces disk usage and does not reduce inference VRAM usage, because the current AudioCraft loading interface still requires the standard weight structure. At runtime, the INT8 packed weights are first dequantized into a temporary directory and then loaded.
 
-## 12. GitHub 仓库建议
+## 12. GitHub Repository Recommendations
 
-代码可以上传 GitHub，但不要通过普通 Git 提交以下目录：
+The code can be uploaded to GitHub, but do not commit the following directories through regular Git:
 
 ```text
 models/
@@ -264,40 +264,40 @@ outputs/
 exe_file/
 ```
 
-普通 Git 会阻止大于 `100 MiB` 的文件。模型权重应放在 Hugging Face Hub 或其他模型托管服务。
+Regular Git blocks files larger than `100 MiB`. Model weights should be hosted on Hugging Face Hub or another model hosting service.
 
-## 13. 常见问题
+## 13. FAQ
 
-### CUDA 不可用
+### CUDA Is Not Available
 
-确认已激活 `lhy_music`，并安装 CUDA 版 PyTorch。
+Make sure `lhy_music` is activated and that the CUDA version of PyTorch is installed.
 
-### style window 太短
+### Style Window Is Too Short
 
-使用：
+Use:
 
 ```bash
 --style-window auto
 ```
 
-### 显存不足
+### Out of VRAM
 
-尝试：
+Try:
 
 ```bash
 --segment-duration 4 --max-style-windows 1
 ```
 
-也可以尝试 `quantization.py` 产生的量化模型，并通过 `--quantized-model-dir` 加载。但当前 INT8 磁盘量化方案主要减少硬盘占用，不能保证降低推理显存，最终效果请以实际生成结果和显存占用为准。
+You can also try a quantized model produced by `quantization.py` and load it with `--quantized-model-dir`. However, the current INT8 disk quantization approach mainly reduces disk usage and cannot guarantee lower inference VRAM usage. The final result should be judged by the actual generation quality and VRAM usage.
 
-### 生成速度慢
+### Generation Is Slow
 
-MusicGen-Style 1.5B 模型较大，长音频会按分段串行生成，这是正常现象。
+MusicGen-Style 1.5B is a large model. Long audio is generated serially in segments, which is expected.
 
-## 14. 限制
+## 14. Limitations
 
-- MusicGen-Style 不擅长生成真实人声。
-- 英文 prompt 通常比中文 prompt 效果更好。
-- crossfade 只能缓解段间突兀，不能保证旋律、和声、结构完全连续。
-- 不承诺低显存显卡一定可运行。
-- 不保证生成内容具有版权安全性。
+- MusicGen-Style is not good at generating realistic vocals.
+- English prompts usually work better than Chinese prompts.
+- Crossfade can only reduce abrupt transitions between segments; it cannot guarantee full continuity of melody, harmony, or structure.
+- There is no guarantee that low-VRAM GPUs can run this project.
+- There is no guarantee that generated content is copyright-safe.
