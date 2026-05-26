@@ -1,0 +1,32 @@
+# Large local assets
+models/
+quant_models/musicgen-style-int8/
+quant_models/musicgen-style-fp16/
+audios/
+outputs/
+exe_file/
+
+# Runtime and temporary files
+__pycache__/
+*.py[cod]
+*.tmp
+*.temp
+*.log
+*.wav
+*.mp3
+
+# Python environment files
+.venv/
+venv/
+env/
+*.egg-info/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Keep lightweight quantization documentation
+!quant_models/
+!quant_models/README.zh-CN.md
+!quant_models/README.en.md
